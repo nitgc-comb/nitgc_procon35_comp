@@ -10,7 +10,7 @@ public:
 
 		const String token = U"token1";
 		const URL url = U"localhost:8080/problem";
-		const HashTable<String, String> headers = { {U"procon-token", token} };
+		const HashTable<String, String> headers = { {U"Procon-Token", token} };
 		const FilePath saveFilePath = U"get_matches_response.json";
 
 		//if GET request OK
@@ -40,7 +40,7 @@ public:
 
 		const URL url = U"localhost:8080/answer";
 		const String token = U"token1";
-		const HashTable<String, String> headers = { {U"procon-token", token}, {U"Content-Type", U"application/json"} };
+		const HashTable<String, String> headers = { {U"Procon-Token", token}, {U"Content-Type", U"application/json"} };
 		const FilePath saveFilePath = U"post_action_response.json";
 
 		//preparation for json to send
