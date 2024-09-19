@@ -1,8 +1,13 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
+# include "SolverProcess.h"
 
 void Main()
 {
+
+	//child process
+	SolverProcess cProcess;
+
 	Scene::SetBackground(ColorF{ 0.6, 0.8, 0.7 });
 
 
@@ -14,6 +19,14 @@ void Main()
 
 		if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {
 			JsonManager::sendPostAction();
+		}
+
+		if (SimpleGUI::Button(U"child send", Vec2{ 320, 420 }, 150)) {
+			cProcess.Send();
+		}
+
+		if (SimpleGUI::Button(U"child receive", Vec2{ 320, 420 }, 150)) {
+			cProcess.Receive();
 		}
 	}
 }
