@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "GeneralPattern.h"
 class JsonManager
 {
 public:
@@ -35,6 +36,7 @@ public:
 		return true;
 	}
 
+
 	// POST request
 	static bool sendPostAction() {
 
@@ -63,5 +65,42 @@ public:
 		}
 
 	}
+
+	// JSON parse
+	static bool jsonParse() {
+		FilePath jsonFilePath = U"get_matches_response.json";
+		JSON json = JSON::Load(jsonFilePath);
+
+		if (!json)
+		{
+			// JSONファイルの読み込みに失敗した場合
+			Console << U"Failed to load JSON file.";
+			return false;
+		}
+		else {
+			int boardWidth = json[U"board"][U"width"].get<int>();
+			int boardHeight = json[U"board"][U"height"].get<int>();
+			//Array<String> start = json[U"board"][U"start"].get<Array<String>>();
+			/*Array<String> goal = json[U"board"][U"goal"].get<Array<String>>();
+			int n = json[U"general"].get<int>();
+			Array<GeneralPattern> patterns;
+			for (int i = 0; i < n; i++) {
+				patterns[i].p = json[U"general"][U"patterns"][i][U"p"].get<int>();
+				patterns[i].width = json[U"general"][U"patterns"][i][U"width"].get<int>();
+				patterns[i].height = json[U"general"][U"patterns"][i][U"height"].get<int>();
+				patterns[i].cells = json[U"general"][U"patterns"][i][U"cells"].get<Array<String>>();
+			}
+
+			Print << boardWidth;
+			Print << patterns[0].p;*/
+
+			return true;
+		}
+
+		
+		
+	}
+
+	
 };
 

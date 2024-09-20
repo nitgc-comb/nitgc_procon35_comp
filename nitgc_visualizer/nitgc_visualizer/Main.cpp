@@ -21,7 +21,11 @@ void Main()
 	while (System::Update())
 	{
 		if (SimpleGUI::Button(U"GET request", Vec2{ 520, 370 }, 150)) {
-			JsonManager::sendGetMatches();
+			bool isGetOK = JsonManager::sendGetMatches();
+			if (isGetOK) {
+				JsonManager::jsonParse();
+			}
+			
 		}
 
 		if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {

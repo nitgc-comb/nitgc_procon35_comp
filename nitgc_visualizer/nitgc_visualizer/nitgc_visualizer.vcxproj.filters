@@ -821,5 +821,8 @@
     <ClInclude Include="SolverProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralPattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
