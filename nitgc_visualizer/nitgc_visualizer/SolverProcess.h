@@ -1,13 +1,14 @@
 ﻿#pragma once
 class SolverProcess
 {
-	SolverProcess() {
+public:
+	static void Create() {
 		solver = ChildProcess{ U"nitgc_solver.exe" };
 		if (not solver) {
 			Print << U"Failed to create a process";
 		}
 	}
-public:
+
 	static void Send() {
 		if (not solver)
 		{

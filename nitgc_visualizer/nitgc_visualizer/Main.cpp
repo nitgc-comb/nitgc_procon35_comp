@@ -1,14 +1,21 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
-# include "SolverProcess.h"
+//# include "SolverProcess.h"
 
 void Main()
 {
 
-	//child process
-	SolverProcess cProcess;
-
+	// background
 	Scene::SetBackground(ColorF{ 0.6, 0.8, 0.7 });
+
+	//child process
+	/*SolverProcess cProcess;
+	cProcess.Create();*/
+	//ChildProcess solver;
+	
+	
+
+
 
 
 	while (System::Update())
@@ -21,14 +28,29 @@ void Main()
 			JsonManager::sendPostAction();
 		}
 
-		if (SimpleGUI::Button(U"child send", Vec2{ 320, 420 }, 150)) {
-			cProcess.Send();
+		if (SimpleGUI::Button(U"child send", Vec2{ 320, 370 }, 150)) {
+			//cProcess.Send();
+			/*solver = ChildProcess{ U"nitgc_solver.exe",Pipe::StdInOut };
+			if (not solver) {
+				Print << U"Failed to create a process";
+			}
+			else {
+				solver.ostream() << 10 << std::endl;
+				solver.ostream() << 20 << std::endl;
+				int result;
+				solver.istream() >> result;
+				Print << U"result: " << result;
+			}*/
 		}
 
 		if (SimpleGUI::Button(U"child receive", Vec2{ 320, 420 }, 150)) {
-			cProcess.Receive();
+			//cProcess.Receive();
+			
 		}
 	}
+
+	
+
 }
 
 //
