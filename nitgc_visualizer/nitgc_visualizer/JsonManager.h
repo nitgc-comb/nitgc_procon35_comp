@@ -80,29 +80,47 @@ public:
 		else {
 			int boardWidth = json[U"board"][U"width"].get<int>();
 			int boardHeight = json[U"board"][U"height"].get<int>();
+			Print << U"Width: " << boardWidth << U" Height: " << boardHeight;
 			Array<String> start(boardHeight);
+			Print << U"Start board";
 			for (int i = 0; i < boardHeight; i++) {
 				start[i] = json[U"board"][U"start"][i].get<String>();
 				Print << start[i];
 			}
 			Array<String> goal(boardHeight);
+			Print << U"Goal board";
 			for (int i = 0; i < boardHeight; i++) {
-				start[i] = json[U"board"][U"goal"][i].get<String>();
+				goal[i] = json[U"board"][U"goal"][i].get<String>();
 				Print << goal[i];
 			}
 			
-			int n = json[U"general"].get<int>();
+			int n = json[U"general"][U"n"].get<int>();
+			Print << U"general patterns: " << n;
 			Array<GeneralPattern> patterns;
 			for (int i = 0; i < n; i++) {
-				patterns[i].p = json[U"general"][U"patterns"][i][U"p"].get<int>();
-				patterns[i].width = json[U"general"][U"patterns"][i][U"width"].get<int>();
-				patterns[i].height = json[U"general"][U"patterns"][i][U"height"].get<int>();
-			
-				patterns[i].cells = json[U"general"][U"patterns"][i][U"cells"].get<Array<String>>();
+				Print << U"Pattern " << i+1 << U":";
+				int h = json[U"general"][U"patterns"][i][U"height"].get<int>();
+				int p = json[U"general"][U"patterns"][i][U"p"].get<int>();
+				int w = json[U"general"][U"patterns"][i][U"width"].get<int>();
+				//GeneralPattern pattern(p, w, h);
+				patterns.emplace_back(p, w, h);
+				Print << U"num: " << patterns[i].p;
+				Print << U"width:" << patterns[i].width;
+				Print << U"height: " << patterns[i].height;
+
+				Print << U"cells: ";
+				for (int j = 0; j < h; j++) {
+					patterns[i].cells[j] = json[U"general"][U"patterns"][i][U"cells"][j].get<String>();
+					Print << patterns[i].cells[j];
+				}
+				//patterns[i] = pattern;
+
+				//// pattern print
+				
+
 			}
 
-			Print << boardWidth;
-			Print << patterns[0].p;
+			
 
 			return true;
 		}
