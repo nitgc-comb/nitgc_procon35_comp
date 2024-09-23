@@ -1,5 +1,6 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
+# include "GeneralPattern.h"
 //# include "SolverProcess.h"
 
 void Main()
@@ -13,15 +14,21 @@ void Main()
 	cProcess.Create();*/
 	//ChildProcess solver;
 	
-	
-
-
-
 
 	while (System::Update())
 	{
 		if (SimpleGUI::Button(U"GET request", Vec2{ 520, 370 }, 150)) {
-			JsonManager::sendGetMatches();
+			bool isGetOK = JsonManager::sendGetMatches();
+			if (isGetOK) {
+				if (auto problem = JsonManager::jsonParse()) {
+					Print << U"JsonParse OK";
+					Print << problem->b.width;
+				}
+				else {
+					Print << U"JsonParse NG";
+				}
+			}
+			
 		}
 
 		if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {

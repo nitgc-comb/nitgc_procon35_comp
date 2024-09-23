@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "GeneralPattern.h"
 class JsonManager
 {
 public:
@@ -35,6 +36,7 @@ public:
 		return true;
 	}
 
+
 	// POST request
 	static bool sendPostAction() {
 
@@ -63,5 +65,79 @@ public:
 		}
 
 	}
+
+	// JSON parse
+	static std::optional<Problem> jsonParse() {
+		Problem problem;
+
+		FilePath jsonFilePath = U"get_matches_response.json";
+		JSON json = JSON::Load(jsonFilePath);
+
+		if (!json)
+		{
+			// JSONファイルの読み込みに失敗した場合
+			Console << U"Failed to load JSON file.";
+			//return std::nullopt;
+			return std::nullopt;
+		}
+		else {
+			int boardWidth = json[U"board"][U"width"].get<int>();
+			int boardHeight = json[U"board"][U"height"].get<int>();
+			problem.b.width = boardWidth;
+			problem.b.height = boardHeight;
+			//Print << U"Width: " << problem.b.width << U" Height: " << boardHeight;
+			Array<String> start(boardHeight);
+			Array<String> goal(boardHeight);
+			
+			for (int i = 0; i < boardHeight; i++) {
+				start[i] = json[U"board"][U"start"][i].get<String>();
+			}
+			
+			for (int i = 0; i < boardHeight; i++) {
+				goal[i] = json[U"board"][U"goal"][i].get<String>();
+			}
+			problem.b.start = start;
+			problem.b.goal = goal;
+			//Print << U"Start board";
+			/*for (int i = 0; i < boardHeight; i++) {
+				Print << problem.b.start[i];
+			}*/
+			//Print << U"Goal board";
+			/*for (int i = 0; i < boardHeight; i++) {
+				Print << problem.b.goal[i];
+			}*/
+			int n = json[U"general"][U"n"].get<int>();
+			problem.g.n = n;
+			//Print << U"general patterns: " << n;
+			Array<GeneralPattern> patterns;
+			for (int i = 0; i < n; i++) {
+				//Print << U"Pattern " << i+1 << U":";
+				int h = json[U"general"][U"patterns"][i][U"height"].get<int>();
+				int p = json[U"general"][U"patterns"][i][U"p"].get<int>();
+				int w = json[U"general"][U"patterns"][i][U"width"].get<int>();
+				
+				patterns.emplace_back(p, w, h);
+				/*Print << U"num: " << patterns[i].p;
+				Print << U"width:" << patterns[i].width;
+				Print << U"height: " << patterns[i].height;*/
+
+				//Print << U"cells: ";
+				for (int j = 0; j < h; j++) {
+					patterns[i].cells[j] = json[U"general"][U"patterns"][i][U"cells"][j].get<String>();
+					//Print << patterns[i].cells[j];
+				}
+			}
+
+			problem.g.patterns = patterns;
+			
+
+			return problem;
+		}
+
+		
+		
+	}
+
+	
 };
 
