@@ -7,7 +7,7 @@ void Main()
 {
 
 	// background
-	Scene::SetBackground(ColorF{ 0.6, 0.8, 0.7 });
+	Scene::SetBackground(ColorF{ 0.0, 0.0, 0.0 });
 
 	//child process
 	/*SolverProcess cProcess;
@@ -17,7 +17,7 @@ void Main()
 
 	while (System::Update())
 	{
-		if (SimpleGUI::Button(U"GET request", Vec2{ 520, 370 }, 150)) {
+		if (SimpleGUI::Button(U"START", Vec2{ 520, 370 }, 150)) {
 			bool isGetOK = JsonManager::sendGetMatches();
 			if (isGetOK) {
 				if (auto problem = JsonManager::jsonParse()) {
@@ -31,29 +31,29 @@ void Main()
 			
 		}
 
-		if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {
-			JsonManager::sendPostAction();
-		}
+		//if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {
+		//	JsonManager::sendPostAction();
+		//}
 
-		if (SimpleGUI::Button(U"child send", Vec2{ 320, 370 }, 150)) {
-			//cProcess.Send();
-			/*solver = ChildProcess{ U"nitgc_solver.exe",Pipe::StdInOut };
-			if (not solver) {
-				Print << U"Failed to create a process";
-			}
-			else {
-				solver.ostream() << 10 << std::endl;
-				solver.ostream() << 20 << std::endl;
-				int result;
-				solver.istream() >> result;
-				Print << U"result: " << result;
-			}*/
-		}
+		//if (SimpleGUI::Button(U"child send", Vec2{ 320, 370 }, 150)) {
+		//	//cProcess.Send();
+		//	/*solver = ChildProcess{ U"nitgc_solver.exe",Pipe::StdInOut };
+		//	if (not solver) {
+		//		Print << U"Failed to create a process";
+		//	}
+		//	else {
+		//		solver.ostream() << 10 << std::endl;
+		//		solver.ostream() << 20 << std::endl;
+		//		int result;
+		//		solver.istream() >> result;
+		//		Print << U"result: " << result;
+		//	}*/
+		//}
 
-		if (SimpleGUI::Button(U"child receive", Vec2{ 320, 420 }, 150)) {
-			//cProcess.Receive();
-			
-		}
+		//if (SimpleGUI::Button(U"child receive", Vec2{ 320, 420 }, 150)) {
+		//	//cProcess.Receive();
+		//	
+		//}
 	}
 
 	
