@@ -328,6 +328,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneralPattern.h" />
+    <ClInclude Include="Solution.h" />
     <ClInclude Include="SolverProcess.h" />
     <ClInclude Include="JsonManager.h" />
     <ClInclude Include="stdafx.h" />

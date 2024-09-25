@@ -1,7 +1,7 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
 # include "GeneralPattern.h"
-//# include "SolverProcess.h"
+# include "SolverProcess.h"
 
 void Main()
 {
@@ -13,22 +13,52 @@ void Main()
 	/*SolverProcess cProcess;
 	cProcess.Create();*/
 	//ChildProcess solver;
+	std::future<int> futureResult;
+	bool isProcessing = false;
 	
 
 	while (System::Update())
 	{
+		// START button
 		if (SimpleGUI::Button(U"START", Vec2{ 520, 370 }, 150)) {
-			bool isGetOK = JsonManager::sendGetMatches();
-			if (isGetOK) {
-				if (auto problem = JsonManager::jsonParse()) {
-					Print << U"JsonParse OK";
-					Print << problem->b.width;
-				}
-				else {
-					Print << U"JsonParse NG";
+			if (!isProcessing) {
+				bool isGetOK = JsonManager::sendGetMatches();
+				if (isGetOK) {
+					if (auto problem = JsonManager::jsonParse()) {
+						Print << U"JsonParse OK";
+						futureResult = std::async(std::launch::async, SolverProcess::solve);
+						isProcessing = true;
+					}
+					else {
+						Print << U"JsonParse NG";
+					}
 				}
 			}
-			
+			else {
+				// if is processing
+				Print << U"processing...";
+			}
+		}
+
+		// STOP button
+		if (SimpleGUI::Button(U"STOP", Vec2{ 520, 420 }, 150)) {
+			if (isProcessing) {
+
+			}
+		}
+
+		// async
+		if (isProcessing) {
+			if (futureResult.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+				// 計算が完了した場合
+				int result = futureResult.get();  // 結果を取得
+				Print << U"result = " << result;
+				isProcessing = false;
+			}
+			else {
+				// 計算中
+				//Print << U"calculating...";
+			}
 		}
 
 		//if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {
