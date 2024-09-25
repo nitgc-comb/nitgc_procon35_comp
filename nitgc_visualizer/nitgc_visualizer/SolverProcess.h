@@ -2,7 +2,11 @@
 class SolverProcess
 {
 public:
-	static void Create() {
+	// function solve will be the main function of solving problem in the future
+	int solve() {
+
+	}
+	/*static void Create() {
 		solver = ChildProcess{ U"nitgc_solver.exe" };
 		if (not solver) {
 			Print << U"Failed to create a process";
@@ -21,8 +25,8 @@ public:
 		int result;
 		solver.istream() >> result;
 		Print << U"result: " << result;
-	}
-private:
-	static ChildProcess solver;
+	}*/
+//private:
+//	static ChildProcess solver;
 };
 
