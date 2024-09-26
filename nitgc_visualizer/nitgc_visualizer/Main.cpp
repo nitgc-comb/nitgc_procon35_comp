@@ -1,6 +1,7 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
-# include "GeneralPattern.h"
+# include "Solution.h"
+# include "Problem.h"
 # include "SolverProcess.h"
 
 void Main()
@@ -26,7 +27,8 @@ void Main()
 				if (isGetOK) {
 					if (auto problem = JsonManager::jsonParse()) {
 						Print << U"JsonParse OK";
-						futureResult = std::async(std::launch::async, SolverProcess::solve);
+						Problem pro = problem.value();
+						futureResult = std::async(std::launch::async, SolverProcess::solve, pro);
 						isProcessing = true;
 					}
 					else {

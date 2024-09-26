@@ -1,11 +1,12 @@
 ﻿#pragma once
+#include "Problem.h"
 class SolverProcess
 {
 public:
 	// function solve will be the main function of solving problem in the future
-	static int solve() {
+	static int solve(Problem problem) {
 		int result = 0;
-		for (int i = 0; i < 5; ++i) {
+		for (int i = 0; i < 5; i++) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));  // 1秒待機
 			result += i;
 			Print << U"Step " << i << U": result = " << result;
@@ -35,4 +36,3 @@ public:
 //private:
 //	static ChildProcess solver;
 };
-

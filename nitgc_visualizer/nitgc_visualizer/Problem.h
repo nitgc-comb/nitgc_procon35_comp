@@ -39,6 +39,6 @@ struct Board {
 };
 
 struct Problem {
-	Board b;
-	General g;
+	Board board;
+	General general;
 };
