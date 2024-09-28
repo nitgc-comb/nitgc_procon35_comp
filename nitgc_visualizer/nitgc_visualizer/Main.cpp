@@ -1,7 +1,8 @@
 ﻿# include <Siv3D.hpp> // Siv3D v0.6.15
 # include "JsonManager.h"
-# include "GeneralPattern.h"
-//# include "SolverProcess.h"
+# include "Solution.h"
+# include "Problem.h"
+# include "SolverProcess.h"
 
 void Main()
 {
@@ -13,22 +14,67 @@ void Main()
 	/*SolverProcess cProcess;
 	cProcess.Create();*/
 	//ChildProcess solver;
+	std::future<std::optional<Solution>> futureResult;
+	bool isProcessing = false;
 	
 
 	while (System::Update())
 	{
+		// START button
 		if (SimpleGUI::Button(U"START", Vec2{ 520, 370 }, 150)) {
-			bool isGetOK = JsonManager::sendGetMatches();
-			if (isGetOK) {
-				if (auto problem = JsonManager::jsonParse()) {
-					Print << U"JsonParse OK";
-					Print << problem->b.width;
-				}
-				else {
-					Print << U"JsonParse NG";
+			if (!isProcessing) {
+				bool isGetOK = JsonManager::sendGetMatches();
+				if (isGetOK) {
+					if (auto problem = JsonManager::jsonParse()) {
+						Print << U"JsonParse OK";
+						Problem pro = problem.value();
+						futureResult = std::async(std::launch::async, SolverProcess::solve, pro);
+						isProcessing = true;
+					}
+					else {
+						Print << U"JsonParse NG";
+					}
 				}
 			}
-			
+			else {
+				// if is processing
+				Print << U"processing...";
+			}
+		}
+
+		// STOP button
+		if (SimpleGUI::Button(U"STOP", Vec2{ 520, 420 }, 150)) {
+			if (isProcessing) {
+
+			}
+		}
+
+		// async
+		if (isProcessing) {
+			if (futureResult.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+				// 計算が完了した場合
+				if (auto result = futureResult.get()) { // retrieve result
+					// if result is commonly retrieved
+					Solution res = result.value();
+					Print << U"result: " << res.n;
+					for (int i = 0; i < res.n; i++) {
+						Print << res.ops[i].p << U" " << res.ops[i].x << U" " << res.ops[i].y << U" " << res.ops[i].s;
+					}
+
+
+					isProcessing = false;
+
+				}
+				else {
+					// if not
+					Print << U"could not solve";
+				}
+				
+			}
+			else {
+				// 計算中
+				//Print << U"calculating...";
+			}
 		}
 
 		//if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {

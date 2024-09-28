@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "GeneralPattern.h"
+#include "Problem.h"
 class JsonManager
 {
 public:
@@ -83,8 +83,8 @@ public:
 		else {
 			int boardWidth = json[U"board"][U"width"].get<int>();
 			int boardHeight = json[U"board"][U"height"].get<int>();
-			problem.b.width = boardWidth;
-			problem.b.height = boardHeight;
+			problem.board.width = boardWidth;
+			problem.board.height = boardHeight;
 			//Print << U"Width: " << problem.b.width << U" Height: " << boardHeight;
 			Array<String> start(boardHeight);
 			Array<String> goal(boardHeight);
@@ -96,8 +96,8 @@ public:
 			for (int i = 0; i < boardHeight; i++) {
 				goal[i] = json[U"board"][U"goal"][i].get<String>();
 			}
-			problem.b.start = start;
-			problem.b.goal = goal;
+			problem.board.start = start;
+			problem.board.goal = goal;
 			//Print << U"Start board";
 			/*for (int i = 0; i < boardHeight; i++) {
 				Print << problem.b.start[i];
@@ -107,7 +107,7 @@ public:
 				Print << problem.b.goal[i];
 			}*/
 			int n = json[U"general"][U"n"].get<int>();
-			problem.g.n = n;
+			problem.general.n = n;
 			//Print << U"general patterns: " << n;
 			Array<GeneralPattern> patterns;
 			for (int i = 0; i < n; i++) {
@@ -128,7 +128,7 @@ public:
 				}
 			}
 
-			problem.g.patterns = patterns;
+			problem.general.patterns = patterns;
 			
 
 			return problem;
