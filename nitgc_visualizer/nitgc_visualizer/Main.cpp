@@ -11,11 +11,11 @@ void Main()
 	Scene::SetBackground(ColorF{ 0.0, 0.0, 0.0 });
 
 	//child process
-	/*SolverProcess cProcess;
-	cProcess.Create();*/
-	//ChildProcess solver;
 	std::future<std::optional<Solution>> futureResult;
 	bool isProcessing = false;
+
+	//minimum operations
+	int minOps = 1000000000;
 	
 
 	while (System::Update())
@@ -49,7 +49,7 @@ void Main()
 			}
 		}
 
-		// async
+		// async (when calculation complete)
 		if (isProcessing) {
 			if (futureResult.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
 				// 計算が完了した場合
@@ -60,6 +60,22 @@ void Main()
 					for (int i = 0; i < res.n; i++) {
 						Print << res.ops[i].p << U" " << res.ops[i].x << U" " << res.ops[i].y << U" " << res.ops[i].s;
 					}
+
+					if (minOps > res.n) {
+						// write json file & POST request
+						if (JsonManager::jsonWrite(res)) {
+							Print << U"Json file write OK";
+
+							if (JsonManager::sendPostAction()) {
+
+							}
+						}
+						else {
+							Print << U"Cannot write json file";
+						}
+					}
+
+					
 
 
 					isProcessing = false;
@@ -75,35 +91,8 @@ void Main()
 				// 計算中
 				//Print << U"calculating...";
 			}
-		}
-
-		//if (SimpleGUI::Button(U"POST request", Vec2{ 520, 420 }, 150)) {
-		//	JsonManager::sendPostAction();
-		//}
-
-		//if (SimpleGUI::Button(U"child send", Vec2{ 320, 370 }, 150)) {
-		//	//cProcess.Send();
-		//	/*solver = ChildProcess{ U"nitgc_solver.exe",Pipe::StdInOut };
-		//	if (not solver) {
-		//		Print << U"Failed to create a process";
-		//	}
-		//	else {
-		//		solver.ostream() << 10 << std::endl;
-		//		solver.ostream() << 20 << std::endl;
-		//		int result;
-		//		solver.istream() >> result;
-		//		Print << U"result: " << result;
-		//	}*/
-		//}
-
-		//if (SimpleGUI::Button(U"child receive", Vec2{ 320, 420 }, 150)) {
-		//	//cProcess.Receive();
-		//	
-		//}
+		}	
 	}
-
-	
-
 }
 
 //

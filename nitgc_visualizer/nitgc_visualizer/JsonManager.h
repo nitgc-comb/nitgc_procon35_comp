@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Problem.h"
+#include "Solution.h"
 class JsonManager
 {
 public:
@@ -57,11 +58,21 @@ public:
 				const JSON json = JSON::Load(saveFilePath);
 				if (not json) {
 					throw Error{ U"Failed to load " + saveFilePath };
+					return false;
 				}
+				else {
+					long long rev = json[U"revision"].get<long long>();
+					Print << U"rev: " << rev;
+					return true;
+				}
+			}
+			else {
+				return false;
 			}
 		}
 		else {
 			Print << U"Failed to post actions.";
+			return false;
 		}
 
 	}
@@ -133,11 +144,22 @@ public:
 
 			return problem;
 		}
-
-		
-		
 	}
 
+	static bool jsonWrite(Solution solution) {
+		JSON json;
+
+		json[U"n"] = solution.n;
+		for (int i = 0; i < solution.n; i++) {
+			json[U"ops"][i][U"p"] = solution.ops[i].p;
+			json[U"ops"][i][U"x"] = solution.ops[i].x;
+			json[U"ops"][i][U"y"] = solution.ops[i].y;
+			json[U"ops"][i][U"s"] = solution.ops[i].s;
+		}
+		json.save(U"solution.json");
+
+		return true;
+	}
 	
 };
 
