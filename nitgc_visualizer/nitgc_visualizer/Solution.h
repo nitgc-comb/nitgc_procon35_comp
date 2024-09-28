@@ -5,6 +5,8 @@ struct Op {
 	int x;
 	int y;
 	int s;
+
+
 };
 
 struct Solution {

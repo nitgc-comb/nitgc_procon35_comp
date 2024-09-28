@@ -14,7 +14,7 @@ void Main()
 	/*SolverProcess cProcess;
 	cProcess.Create();*/
 	//ChildProcess solver;
-	std::future<int> futureResult;
+	std::future<std::optional<Solution>> futureResult;
 	bool isProcessing = false;
 	
 
@@ -53,9 +53,23 @@ void Main()
 		if (isProcessing) {
 			if (futureResult.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
 				// 計算が完了した場合
-				int result = futureResult.get();  // 結果を取得
-				Print << U"result = " << result;
-				isProcessing = false;
+				if (auto result = futureResult.get()) { // retrieve result
+					// if result is commonly retrieved
+					Solution res = result.value();
+					Print << U"result: " << res.n;
+					for (int i = 0; i < res.n; i++) {
+						Print << res.ops[i].p << U" " << res.ops[i].x << U" " << res.ops[i].y << U" " << res.ops[i].s;
+					}
+
+
+					isProcessing = false;
+
+				}
+				else {
+					// if not
+					Print << U"could not solve";
+				}
+				
 			}
 			else {
 				// 計算中
