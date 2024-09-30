@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Problem.h"
 #include "Solution.h"
+#include <fstream>
 class JsonManager
 {
 public:
@@ -47,7 +48,7 @@ public:
 		const FilePath saveFilePath = U"post_action_response.json";
 
 		//preparation for json to send
-		JSON sendjson = JSON::Load(U"solution.json");
+		JSON sendjson = JSON::Load(U"solution_rev.json");
 		const std::string data = sendjson.formatUTF8();
 
 		//post request to server
@@ -157,6 +158,28 @@ public:
 			json[U"ops"][i][U"s"] = solution.ops[i].s;
 		}
 		json.save(U"solution.json");
+
+		// delete first 3 byte
+		std::string outputFileName = "solution_rev.json";
+		std::ifstream inputFile("solution.json", std::ios::binary);
+		if (!inputFile) {
+			Print << U"json write failed (1)";
+			return false;
+		}
+
+		inputFile.seekg(3);
+
+		std::vector<char> buffer((std::istreambuf_iterator<char>(inputFile)), std::istreambuf_iterator<char>());
+		inputFile.close();
+
+		std::ofstream outputFile(outputFileName, std::ios::binary);
+		if (!outputFile) {
+			Print << U"json write failed (2)";
+			return false;
+		}
+
+		outputFile.write(buffer.data(), buffer.size());
+		outputFile.close();
 
 		return true;
 	}

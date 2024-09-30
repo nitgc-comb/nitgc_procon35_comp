@@ -5,12 +5,16 @@ class SolverProcess
 {
 public:
 	// function solve will be the main function of solving problem in the future
-	static std::optional<Solution> solve(Problem problem) {
+	static std::optional<Solution> solve(Problem problem, std::atomic<bool>& stopFlag) {
 		Solution solution;
 		int result = 0;
 		for (int i = 0; i < 5; i++) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));  // 1秒待機
 			result += i;
+			if (stopFlag) {
+				Print << U"calculation canceled";
+				return std::nullopt;
+			}
 			Print << U"Step " << i << U": result = " << result;
 		}
 

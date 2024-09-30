@@ -16,6 +16,8 @@ void Main()
 	bool isProcessing = false;
 	// if start or not
 	bool isActivating = false;
+	// stop flag (to stop calculation)
+	std::atomic<bool> stopFlag = false;
 
 	// number of attempts
 	int attempts = 0;
@@ -35,8 +37,9 @@ void Main()
 		font(U"minOps: ", minOps).draw(440, 100);
 
 
-		// START button
+		// START button (setup)
 		if (SimpleGUI::Button(U"START", Vec2{ 520, 370 }, 150)) {
+			stopFlag = false;
 			if (!isActivating) { // setup
 				if (JsonManager::sendGetMatches()) {
 					if (auto problem = JsonManager::jsonParse()) {
@@ -56,14 +59,14 @@ void Main()
 
 		// STOP button
 		if (SimpleGUI::Button(U"STOP", Vec2{ 520, 420 }, 150)) {
-			Print << U"stopped";
 			isProcessing = false;
 			isActivating = false;
+			stopFlag = true;
 		}
 
 		// start calculation
 		if (isActivating && !isProcessing) {
-			futureResult = std::async(std::launch::async, SolverProcess::solve, pro);
+			futureResult = std::async(std::launch::async, SolverProcess::solve, pro, std::ref(stopFlag));
 			isProcessing = true;
 		}
 
@@ -74,10 +77,9 @@ void Main()
 				if (auto result = futureResult.get()) { // retrieve result
 					// if result is commonly retrieved
 					Solution res = result.value();
-					Print << U"result: " << res.n;
-					for (int i = 0; i < res.n; i++) {
-						Print << res.ops[i].p << U" " << res.ops[i].x << U" " << res.ops[i].y << U" " << res.ops[i].s;
-					}
+					Print << U"calculation completed";
+					Print << U"ops = " << res.n;
+					attempts++;
 
 					if (minOps == -1 || minOps > res.n) {
 						// write json file & POST request
@@ -87,6 +89,9 @@ void Main()
 
 							if (JsonManager::sendPostAction()) {
 								Print << U"Post Action OK";
+							}
+							else {
+								Print << U"Post Action failed";
 							}
 						}
 						else {
