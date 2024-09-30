@@ -12,41 +12,59 @@ void Main()
 
 	//child process
 	std::future<std::optional<Solution>> futureResult;
+	// if during calculation
 	bool isProcessing = false;
+	// if start or not
+	bool isActivating = false;
 
+	// number of attempts
+	int attempts = 0;
 	//minimum operations
-	int minOps = 1000000000;
+	int minOps = -1;
+
+	//text font
+	const Font font{ 30 };
+
+	Problem pro;
 	
 
 	while (System::Update())
 	{
+		//texts
+		font(U"attempts: ", attempts).draw(440,30);
+		font(U"minOps: ", minOps).draw(440, 100);
+
+
 		// START button
 		if (SimpleGUI::Button(U"START", Vec2{ 520, 370 }, 150)) {
-			if (!isProcessing) {
-				bool isGetOK = JsonManager::sendGetMatches();
-				if (isGetOK) {
+			if (!isActivating) { // setup
+				if (JsonManager::sendGetMatches()) {
 					if (auto problem = JsonManager::jsonParse()) {
-						Print << U"JsonParse OK";
-						Problem pro = problem.value();
-						futureResult = std::async(std::launch::async, SolverProcess::solve, pro);
-						isProcessing = true;
+						pro = problem.value();
+						Print << U"Setup OK";
+						isActivating = true;
 					}
 					else {
-						Print << U"JsonParse NG";
+						Print << U"Json Parse failed";
 					}
 				}
-			}
-			else {
-				// if is processing
-				Print << U"processing...";
+				else {
+					Print << U"Get Request failed";
+				}
 			}
 		}
 
 		// STOP button
 		if (SimpleGUI::Button(U"STOP", Vec2{ 520, 420 }, 150)) {
-			if (isProcessing) {
+			Print << U"stopped";
+			isProcessing = false;
+			isActivating = false;
+		}
 
-			}
+		// start calculation
+		if (isActivating && !isProcessing) {
+			futureResult = std::async(std::launch::async, SolverProcess::solve, pro);
+			isProcessing = true;
 		}
 
 		// async (when calculation complete)
@@ -61,22 +79,20 @@ void Main()
 						Print << res.ops[i].p << U" " << res.ops[i].x << U" " << res.ops[i].y << U" " << res.ops[i].s;
 					}
 
-					if (minOps > res.n) {
+					if (minOps == -1 || minOps > res.n) {
 						// write json file & POST request
+						minOps = res.n;
 						if (JsonManager::jsonWrite(res)) {
 							Print << U"Json file write OK";
 
 							if (JsonManager::sendPostAction()) {
-
+								Print << U"Post Action OK";
 							}
 						}
 						else {
 							Print << U"Cannot write json file";
 						}
 					}
-
-					
-
 
 					isProcessing = false;
 
