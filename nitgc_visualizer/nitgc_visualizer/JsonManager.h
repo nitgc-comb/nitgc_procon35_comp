@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Problem.h"
 #include "Solution.h"
+#include <fstream>
 class JsonManager
 {
 public:
@@ -156,7 +157,39 @@ public:
 			json[U"ops"][i][U"y"] = solution.ops[i].y;
 			json[U"ops"][i][U"s"] = solution.ops[i].s;
 		}
-		json.save(U"solution.json");
+		//json.save(U"solution.json");
+		TextWriter writer(U"solution.json", TextEncoding::UTF8_NO_BOM);
+		if (writer.isOpen())
+		{
+			writer.write(Unicode::FromUTF8(json.formatUTF8())); // JSONをフォーマットして書き出し
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+		// delete first 3 byte
+		/*std::string outputFileName = "solution_rev.json";
+		std::ifstream inputFile("solution.json", std::ios::binary);
+		if (!inputFile) {
+			Print << U"json write failed (1)";
+			return false;
+		}
+
+		inputFile.seekg(3);
+
+		std::vector<char> buffer((std::istreambuf_iterator<char>(inputFile)), std::istreambuf_iterator<char>());
+		inputFile.close();
+
+		std::ofstream outputFile(outputFileName, std::ios::binary);
+		if (!outputFile) {
+			Print << U"json write failed (2)";
+			return false;
+		}
+
+		outputFile.write(buffer.data(), buffer.size());
+		outputFile.close();*/
 
 		return true;
 	}
