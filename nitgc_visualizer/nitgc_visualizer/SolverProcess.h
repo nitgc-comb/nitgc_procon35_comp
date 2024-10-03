@@ -1,6 +1,11 @@
 ﻿#pragma once
 #include "Problem.h"
 #include "Solution.h"
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+#define pint pair<int,int>
+
 class SolverProcess
 {
 public:
@@ -25,8 +30,8 @@ public:
 		for (int i = 0; i < n; i++) {
 			operations.emplace_back();
 			operations[i].p = 4;
-			operations[i].x = 5;
-			operations[i].y = 6;
+			operations[i].x = 0;
+			operations[i].y = 0;
 			operations[i].s = 2;
 		}
 		solution.ops = operations;
