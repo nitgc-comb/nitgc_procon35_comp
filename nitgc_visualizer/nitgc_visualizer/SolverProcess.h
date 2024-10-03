@@ -19,7 +19,7 @@ public:
 		}
 
 		// store an information for return
-		int n = 5;
+		int n = 1;
 		solution.n = n;
 		Array<Op> operations;
 		for (int i = 0; i < n; i++) {

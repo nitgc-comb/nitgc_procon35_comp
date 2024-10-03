@@ -48,7 +48,7 @@ public:
 		const FilePath saveFilePath = U"post_action_response.json";
 
 		//preparation for json to send
-		JSON sendjson = JSON::Load(U"solution_rev.json");
+		JSON sendjson = JSON::Load(U"solution.json");
 		const std::string data = sendjson.formatUTF8();
 
 		//post request to server
@@ -157,10 +157,20 @@ public:
 			json[U"ops"][i][U"y"] = solution.ops[i].y;
 			json[U"ops"][i][U"s"] = solution.ops[i].s;
 		}
-		json.save(U"solution.json");
+		//json.save(U"solution.json");
+		TextWriter writer(U"solution.json", TextEncoding::UTF8_NO_BOM);
+		if (writer.isOpen())
+		{
+			writer.write(Unicode::FromUTF8(json.formatUTF8())); // JSONをフォーマットして書き出し
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 
 		// delete first 3 byte
-		std::string outputFileName = "solution_rev.json";
+		/*std::string outputFileName = "solution_rev.json";
 		std::ifstream inputFile("solution.json", std::ios::binary);
 		if (!inputFile) {
 			Print << U"json write failed (1)";
@@ -179,7 +189,7 @@ public:
 		}
 
 		outputFile.write(buffer.data(), buffer.size());
-		outputFile.close();
+		outputFile.close();*/
 
 		return true;
 	}
