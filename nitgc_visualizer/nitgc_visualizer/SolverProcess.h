@@ -161,7 +161,15 @@ public:
 						j2 = j;
 					}
 
-					int i = addedway.begin()->first, j = addedway.begin()->first;
+					// -----------------------------------------revised-------------------------
+					int i, j;
+					if (!addedway.empty()) {
+						i = addedway.begin()->first, j = addedway.begin()->first;
+					}
+					else {
+						break;
+					}
+					// -----------------------------------------revised-------------------------
 					
 					while (j != addedway.begin()->second + 1) {
 						j += 1;
@@ -407,11 +415,16 @@ public:
 					score = 0;
 					score2 = 0;
 					raw = -1;
-					if (-limitway2.begin()->first.first - 1 > -freeway2.begin()->first.first) {
-						way = limitway2.begin()->second;
-						waywidth = -limitway2.begin()->first.first - 1;
-						score = 1;
+					// -----------------------------------------revised-------------------------
+					if (!limitway2.empty()) {
+						if (-limitway2.begin()->first.first - 1 > -freeway2.begin()->first.first) {
+							way = limitway2.begin()->second;
+							waywidth = -limitway2.begin()->first.first - 1;
+							score = 1;
+						}
 					}
+					// -----------------------------------------revised-------------------------
+					
 					way.second = way.first + waywidth;
 					score2 = score;
 					for (int i = max(sorted + 1, 0); i < tate - 1; i += 1) {
@@ -464,6 +477,8 @@ public:
 			cout << tesuu << endl;
 		}
 		
+
+
 
 		// tentative program
 		int result = 0;
