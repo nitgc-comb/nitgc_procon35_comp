@@ -4,7 +4,7 @@
     "token2",
     "token3"
   ],
-  "duration": 300,
+  "duration": 86400,
   "problem": {
     "board": {
       "width": 6,

@@ -6,6 +6,11 @@ struct Op {
 	int y;
 	int s;
 
+	Op()
+		: p(0), x(0), y(0), s(0) {}
+
+	Op(int p_, int x_, int y_, int s_)
+		: p(p_), x(x_), y(y_), s(s_) {}
 
 };
 
@@ -14,8 +19,8 @@ struct Solution {
 	Array<Op> ops;
 
 	Solution(int n_)
-		: n(n_), ops(n_) {}
+		: n(n_), ops() {}
 
 	Solution()
-		: n(0), ops(0) {}
+		: n(0), ops() {}
 };
