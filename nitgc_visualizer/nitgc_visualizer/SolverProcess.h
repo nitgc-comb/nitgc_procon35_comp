@@ -501,40 +501,7 @@ public:
 			swap(tate, yoko);
 			cout << solution.n << endl;
 		}
-		
-		for (vector<int> i : allgenjou) {
-			for (int j : i) {
-				Console << j;
-			}
-			Console << U" ";
-		}
 
-
-
-		// tentative program
-		//int result = 0;
-		//for (int i = 0; i < 5; i++) {
-		//	std::this_thread::sleep_for(std::chrono::seconds(1));  // 1秒待機
-		//	result += i;
-		//	if (stopFlag) {
-		//		Print << U"calculation canceled";
-		//		return std::nullopt;
-		//	}
-		//	Print << U"Step " << i << U": result = " << result;
-		//}
-
-		// store an information for return
-		/*int n = 1;
-		solution.n = n;
-		Array<Op> operations;
-		for (int i = 0; i < n; i++) {
-			operations.emplace_back();
-			operations[i].p = 4;
-			operations[i].x = 0;
-			operations[i].y = 0;
-			operations[i].s = 2;
-		}
-		solution.ops = operations;*/
 
 		return solution;  // 計算結果を返す
 	}
