@@ -93,7 +93,7 @@ public:
 		//int tesuu = 0;
 		vector<vector<int> > allgenjou(tate, vector<int>(yoko));//型抜きに応じて変更する配列
 		vector<vector<int> > allrisou(tate, vector<int>(yoko));//目指す配列
-		vector<int> side(tate);//各行が初期状態と比べて右にどれだけ型抜きされているか
+		//vector<int> side(tate);//各行が初期状態と比べて右にどれだけ型抜きされているか
 		map<int, int> move;//各行で余っている数字と足りない数字
 
 
@@ -174,17 +174,10 @@ public:
 						}
 						j2 = j;
 					}
-
-					// -----------------------------------------revised-------------------------
-					int i, j;
-					if (!addedway.empty()) {
-						i = addedway.begin()->first, j = addedway.begin()->first;
-					}
-					else {
+					if (addedway.size() == 0) {
 						break;
 					}
-					// -----------------------------------------revised-------------------------
-					
+					int i = addedway.begin()->first, j = addedway.begin()->first;
 					while (j != addedway.begin()->second + 1) {
 						j += 1;
 						move[genjou.at(tate - 1).at((j - 1 + side.at(tate - 1)) % yoko)] += 1;
@@ -250,6 +243,7 @@ public:
 
 					for (int i2 = 0; i2 < yoko; i2 += 1) {
 						int rotate = (i2 + 1) / 2 * round(pow(-1, i2));
+						//Print << U"rotate:" << rotate;
 						rotate = (rotate + yoko) % yoko;
 						score2 = score;
 						int sc2 = score;
@@ -278,36 +272,36 @@ public:
 						}
 						if (score2 != sc2 && raw != -1) {
 							if (i2 != 0) {
-								int rotate2 = ((rotate + 16) % 32) - 16;
+								int rotate2 = ((rotate + yoko/2) % yoko) - yoko/2;
 								side.at(raw) = (side.at(raw) + rotate) % yoko;
+								cout << rotate << endl;
 								if (rotate2 < 0) {
 									rotate2 *= -1;
-									if (rotate <= 2 || raw < tate - 2) {
-										// solution operation append
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw << " " << 2 << endl;
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw, 2);
+									if (rotate2 <= 2 || raw >= tate - 2) {
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw << " " << 3 << endl;
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw, 3);
 										//tesuu += 1;
 									}
 									else {
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw << " " << 2 << endl;
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << rotate2 << " " << raw + 2 << " " << 3 << endl;
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw, 2);
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), rotate2, raw + 2, 3);
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw << " " << 3 << endl;
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << 0 << " " << raw + 2 << " " << 2 << endl;
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw, 3);
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), 0, raw + 2, 2);
 										//tesuu += 2;
 									}
 
 								}
 								else {
-									if (rotate <= 2 || raw < tate - 2) {
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << rotate2 << " " << raw << " " << 3 << endl;
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), rotate2, raw, 3);
+									if (rotate2 <= 2 || raw >= tate - 2) {
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << rotate2 << " " << raw << " " << 2 << endl;
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), rotate2, raw, 2);
 										//tesuu += 1;
 									}
 									else {
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << rotate2 << " " << raw << " " << 3 << endl;
-										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw << " " << 2 << endl;
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), rotate2, raw, 3);
-										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw, 2);
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << rotate2 << " " << raw << " " << 2 << endl;
+										cout << max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)) << " " << yoko - rotate2 << " " << raw + 2 << " " << 3 << endl;
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), rotate2, raw, 2);
+										storeSolution(&solution, max(round(ceil(log(rotate2 * 1.0) / log(2) - 0.001) * 3 - 1), round(0)), yoko - rotate2, raw + 2, 3);
 										//tesuu += 2;
 									}
 								}
@@ -327,14 +321,14 @@ public:
 					while (raw != tate - 1) {
 						//tesuu += 1;
 						if (raw - sorted >= waywidth) {
-							cout << max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)) << " " << way.first << " " << raw - max(0, waywidth - 1) << " " << 1 << endl;
-							storeSolution(&solution, max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)), way.first, raw - max(0, waywidth - 1), 1);
+							cout << max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)) << " " << way.first << " " << raw - max(0, waywidth - 1) << " " << 0 << endl;
+							storeSolution(&solution, max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)), way.first, raw - max(0, waywidth - 1), 0);
 							downshape(&genjou, side, floor(log(waywidth + 1.0001) / log(2)) * 3, way.first, raw - max(0, waywidth - 1));
 							raw = tate - 1;
 						}
 						else {
-							cout << max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)) << " " << way.first << " " << sorted + 1 + ((raw - sorted + 1) % 2) << " " << 1 << endl;
-							storeSolution(&solution, max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)), way.first, sorted + 1 + ((raw - sorted + 1) % 2), 1);
+							cout << max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)) << " " << way.first << " " << sorted + 1 + ((raw - sorted + 1) % 2) << " " << 0 << endl;
+							storeSolution(&solution, max(round(floor(log(waywidth + 1.0001) / log(2)) * 3 - 1), round(0)), way.first, sorted + 1 + ((raw - sorted + 1) % 2), 0);
 							downshape(&genjou, side, floor(log(waywidth + 1.0001) / log(2)) * 3, way.first, sorted + 1 + ((raw - sorted + 1) % 2));
 							raw = tate - 1 - min((tate - 1 - raw) / 2, (waywidth / 2 - (raw - sorted - 1) / 2));
 						}
@@ -344,13 +338,15 @@ public:
 				} while (true);
 
 				//一番下のラインを一番上にあげる
-				cout << 22 << " " << 0 << " " << tate - 257 << " " << 1 << endl;
-				storeSolution(&solution, 22, 0, tate - 257, 1);
+				cout << 22 << " " << 0 << " " << tate - 257 << " " << 0 << endl;
+				storeSolution(&solution, 22, 0, tate - 257, 0);
+				//tesuu += 1;
 				downshape(&genjou, side, 22, 0, tate - 257);
 				sorted = count;
 			}
-			cout << 22 << " " << 0 << " " << tate - 257 << " " << 1 << endl;
-			storeSolution(&solution, 22, 0, tate - 257, 1);
+			cout << 22 << " " << 0 << " " << tate - 257 << " " << 0 << endl;
+			storeSolution(&solution, 22, 0, tate - 257, 0);
+			//tesuu += 1;
 			downshape(&genjou, side, 22, 0, tate - 257);
 			for (int i = 0; i < tate; i += 1) {
 				for (int j = 0; j < yoko; j += 1) {
@@ -371,16 +367,17 @@ public:
 
 
 
+
 		swap(tate, yoko);
 		for (int swapping = 1; swapping < 2; swapping += 1) {
 			vector<int> side(tate);//各行が初期状態と比べて右にどれだけ型抜きされているか
 			vector<vector<int> > genjou(tate, vector<int>(yoko));//型抜きに応じて変更する配列
 			vector<vector<int> > risou(tate, vector<int>(yoko));//目指す配列
-
 			for (int i = 0; i < tate; i += 1) {
 				for (int j = 0; j < yoko; j += 1) {
 					genjou.at(i).at(j) = allgenjou.at(j).at(i);
 				}
+				side.at(i) = 0;
 			}
 			for (int i = 0; i < tate; i += 1) {
 				for (int j = 0; j < yoko; j += 1) {
@@ -440,7 +437,6 @@ public:
 					score = 0;
 					score2 = 0;
 					raw = -1;
-					// -----------------------------------------revised-------------------------
 					if (!limitway2.empty()) {
 						if (-limitway2.begin()->first.first - 1 > -freeway2.begin()->first.first) {
 							way = limitway2.begin()->second;
@@ -448,8 +444,6 @@ public:
 							score = 1;
 						}
 					}
-					// -----------------------------------------revised-------------------------
-					
 					way.second = way.first + waywidth;
 					score2 = score;
 					for (int i = max(sorted + 1, 0); i < tate - 1; i += 1) {
@@ -471,14 +465,14 @@ public:
 					while (raw != tate - 1) {
 						//tesuu += 1;
 						if (raw - sorted >= waywidth) {
-							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << raw - max(0, waywidth - 1) << " " << way.first << " " << 3 << endl;
-							storeSolution(&solution, floor(log(waywidth + 1.0001) / log(2)) * 3, raw - max(0, waywidth - 1), way.first, 3);
+							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << raw - max(0, waywidth - 1) << " " << way.first << " " << 2 << endl;
+							storeSolution(&solution, floor(log(waywidth + 1.0001) / log(2)) * 3, raw - max(0, waywidth - 1), way.first, 2);
 							downshape(&genjou, side, floor(log(waywidth + 1.0001) / log(2)) * 3, way.first, raw - max(0, waywidth - 1));
 							raw = tate - 1;
 						}
 						else {
-							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << sorted + 1 + ((raw - sorted + 1) % 2) << " " << way.first << " " << 3 << endl;
-							storeSolution(&solution, floor(log(waywidth + 1.0001) / log(2)) * 3, sorted + 1 + ((raw - sorted + 1) % 2), way.first, 3);
+							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << sorted + 1 + ((raw - sorted + 1) % 2) << " " << way.first << " " << 2 << endl;
+							storeSolution(&solution, floor(log(waywidth + 1.0001) / log(2)) * 3, sorted + 1 + ((raw - sorted + 1) % 2), way.first, 2);
 							downshape(&genjou, side, floor(log(waywidth + 1.0001) / log(2)) * 3, way.first, sorted + 1 + ((raw - sorted + 1) % 2));
 							raw = tate - 1 - min((tate - 1 - raw) / 2, (waywidth / 2 - (raw - sorted - 1) / 2));
 						}
@@ -489,13 +483,15 @@ public:
 				} while (true);
 
 				//一番下のラインを一番上にあげる
-				cout << 22 << " " << tate - 257 << " " << 0 << " " << 3 << endl;
-				storeSolution(&solution, 22, tate - 257, 0, 3);
+				cout << 22 << " " << tate - 257 << " " << 0 << " " << 2 << endl;
+				storeSolution(&solution, 22, tate - 257, 0, 2);
+				//tesuu += 1;
 				downshape(&genjou, side, 22, 0, tate - 257);
 				sorted = count;
 			}
-			cout << 22 << " " << tate - 257 << " " << 0 << " " << 3 << endl;
-			storeSolution(&solution, 22, tate - 257, 0, 3);
+			cout << 22 << " " << tate - 257 << " " << 0 << " " << 2 << endl;
+			storeSolution(&solution, 22, tate - 257, 0, 2);
+			//tesuu += 1;
 			downshape(&genjou, side, 22, 0, tate - 257);
 			for (int i = 0; i < tate; i += 1) {
 				for (int j = 0; j < yoko; j += 1) {
@@ -503,7 +499,7 @@ public:
 				}
 			}
 			swap(tate, yoko);
-			//cout << tesuu << endl;
+			cout << solution.n << endl;
 		}
 		
 		for (vector<int> i : allgenjou) {
