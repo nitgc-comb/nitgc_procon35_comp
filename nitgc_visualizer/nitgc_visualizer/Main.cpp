@@ -23,6 +23,9 @@ void Main()
 	int attempts = 0;
 	//minimum operations
 	int minOps = -1;
+	// number of unmatch pieces
+	int minUnmatch = -1;
+	int unmatch = 0;
 
 	//text font
 	const Font font{ 30 };
@@ -66,7 +69,7 @@ void Main()
 
 		// start calculation
 		if (isActivating && !isProcessing) {
-			futureResult = std::async(std::launch::async, SolverProcess::solve, pro, std::ref(stopFlag));
+			futureResult = std::async(std::launch::async, SolverProcess::solve, pro, std::ref(stopFlag), &unmatch);
 			isProcessing = true;
 		}
 
@@ -81,6 +84,10 @@ void Main()
 					Print << U"ops = " << res.n;
 					attempts++;
 
+					// judge if do post action
+					/*if (minUnmatch == -1 || minUnmatch > unmatch) {
+
+					}*/
 					if (minOps == -1 || minOps > res.n) {
 						// write json file & POST request
 						minOps = res.n;

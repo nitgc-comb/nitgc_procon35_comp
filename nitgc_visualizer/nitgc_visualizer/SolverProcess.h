@@ -10,39 +10,6 @@ using namespace std;
 class SolverProcess
 {
 public:
-	// solve function (for demo)
-	//static std::optional<Solution> solve_demo(Problem problem, std::atomic<bool>& stopFlag) {
-	//	Solution solution;
-	//	int result = 0;
-	//	for (int i = 0; i < 5; i++) {
-	//		std::this_thread::sleep_for(std::chrono::seconds(1));  // 1秒待機
-	//		result += i;
-	//		if (stopFlag) {
-	//			Print << U"calculation canceled";
-	//			return std::nullopt;
-	//		}
-	//		Print << U"Step " << i << U": result = " << result;
-	//	}
-
-	//	// store an information for return
-	//	int n = 1;
-	//	solution.n = n;
-	//	Array<Op> operations;
-	//	for (int i = 0; i < n; i++) {
-	//		operations.emplace_back();
-	//		operations[i].p = 4;
-	//		operations[i].x = 0;
-	//		operations[i].y = 0;
-	//		operations[i].s = 2;
-	//	}
-	//	solution.ops = operations;
-
-
-	//	return solution;  // 計算結果を返す
-	//}
-	
-	// ---------------------------for performance--------------------------------------
-
 	static void storeSolution(Solution* sln, int p, int x, int y, int s) {
 		Op op(p,x,y,s);
 
@@ -81,10 +48,12 @@ public:
 
 
 	// solve function (for performance)
-	static std::optional<Solution> solve(Problem problem, std::atomic<bool>& stopFlag) {
+	static std::optional<Solution> solve(Problem problem, std::atomic<bool>& stopFlag, int* ummatchCount) {
 		Solution solution;
 		/*Array<Op> operations;
 		Op op;*/
+
+		*ummatchCount = 0;
 
 		int tate, yoko;//ボートの縦と横
 		tate = problem.board.height;
@@ -501,6 +470,17 @@ public:
 			swap(tate, yoko);
 			cout << solution.n << endl;
 		}
+
+
+		//count unmatched
+		for (int i = 0; i < allgenjou.size(); i++) {
+			for (int j = 0; j < allgenjou.at(0).size(); j++) {
+				if (allgenjou.at(i).at(j) != allrisou.at(i).at(j)) {
+					*ummatchCount++;
+				}
+			}
+		}
+
 
 
 		return solution;  // 計算結果を返す
