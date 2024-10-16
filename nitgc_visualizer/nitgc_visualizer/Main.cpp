@@ -14,7 +14,7 @@ void Main()
 	std::future<std::optional<Solution>> futureResult;
 	// if during calculation
 	bool isProcessing = false;
-	// if start or not
+	// if start button pressed or not
 	bool isActivating = false;
 	// stop flag (to stop calculation)
 	std::atomic<bool> stopFlag = false;
@@ -49,14 +49,17 @@ void Main()
 					if (auto problem = JsonManager::jsonParse()) {
 						pro = problem.value();
 						Print << U"Setup OK";
+						Logger << U"Setup OK";
 						isActivating = true;
 					}
 					else {
 						Print << U"Json Parse failed";
+						Logger << U"Json Parse failed";
 					}
 				}
 				else {
 					Print << U"Get Request failed";
+					Logger << U"Get Request failed";
 				}
 			}
 		}
@@ -84,6 +87,9 @@ void Main()
 					Print << U"calculation completed";
 					Print << U"ops = " << res.n;
 					Print << U"unmatch = " << unmatch;
+					Logger << U"calculation completed";
+					Logger << U"ops = " << res.n;
+					Logger << U"unmatch = " << unmatch;
 					attempts++;
 
 					// judge if do post action
@@ -96,7 +102,13 @@ void Main()
 					}
 					else if (minUnmatch == -1 || minUnmatch > unmatch){
 						minUnmatch = unmatch;
-						JsonManager::sendActions;
+						if (minUnmatch == 0) {
+							minOps = res.n;
+							JsonManager::sendActions(res);
+						}
+						else {
+							JsonManager::sendActions(res);
+						}
 					}
 					
 
@@ -106,6 +118,7 @@ void Main()
 				else {
 					// if not
 					Print << U"could not solve";
+					Logger << U"could not solve";
 				}
 				
 			}

@@ -19,6 +19,7 @@ public:
 		//if GET request OK
 		if (const auto response = SimpleHTTP::Get(url, headers, saveFilePath)) {
 			Print << response.getStatusLine();
+			Logger << response.getStatusLine();
 
 			if (response.isOK()) {
 				const JSON json = JSON::Load(saveFilePath);
@@ -32,6 +33,7 @@ public:
 		}
 		else { // if Get request failed
 			Print << U"Failed to send getMatches.";
+			Logger << U"Failed to send getMatches.";
 			return false;
 		}
 
@@ -54,6 +56,7 @@ public:
 		//post request to server
 		if (auto response = SimpleHTTP::Post(url, headers, data.data(), data.size(), saveFilePath)) {
 			Print << response.getStatusLine();
+			Logger << response.getStatusLine();
 
 			if (response.isOK()) {
 				const JSON json = JSON::Load(saveFilePath);
@@ -64,6 +67,7 @@ public:
 				else {
 					long long rev = json[U"revision"].get<long long>();
 					Print << U"rev: " << rev;
+					Logger << U"rev: " << rev;
 					return true;
 				}
 			}
@@ -73,6 +77,7 @@ public:
 		}
 		else {
 			Print << U"Failed to post actions.";
+			Logger << U"Failed to post actions.";
 			return false;
 		}
 
@@ -199,16 +204,21 @@ public:
 		// write json file & POST request
 		if (JsonManager::jsonWrite(result)) {
 			Print << U"Json file write OK";
+			Logger << U"Json file write OK";
+
 
 			if (JsonManager::sendPostAction()) {
 				Print << U"Post Action OK";
+				Logger << U"Post Action OK";
 			}
 			else {
 				Print << U"Post Action failed";
+				Logger << U"Post Action failed";
 			}
 		}
 		else {
 			Print << U"Cannot write json file";
+			Logger << U"Cannot write json file";
 		}
 	}
 	

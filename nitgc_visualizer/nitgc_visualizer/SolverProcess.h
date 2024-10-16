@@ -48,12 +48,12 @@ public:
 
 
 	// solve function (for performance)
-	static std::optional<Solution> solve(Problem problem, std::atomic<bool>& stopFlag, int* ummatchCount) {
+	static std::optional<Solution> solve(Problem problem, std::atomic<bool>& stopFlag, int* unmatchCount) {
 		Solution solution;
 		/*Array<Op> operations;
 		Op op;*/
 
-		*ummatchCount = 0;
+		*unmatchCount = 0;
 
 		int tate, yoko;//ボートの縦と横
 		tate = problem.board.height;
@@ -111,8 +111,16 @@ public:
 			set<pair<pint, pint>> deleteway;
 			pint research = make_pair(0, yoko);
 			for (int count = 0; count < tate - 1; count += 1) {
-				Print << count;
-				
+				Print << U"Processing line: " << count;
+				Logger << U"Processing line: " << count;
+
+				// stop calculation if stop pressed
+				if (stopFlag == true) {
+					Print << U"calculation canceled";
+					Logger << U"calculation canceled";
+					return std::nullopt;
+				}
+
 				for (int i = 0; i < 4; i += 1) {
 					move[i] = 0;
 				}
@@ -383,7 +391,16 @@ public:
 			set<pair<pint, pint>> deleteway;
 			pint research = make_pair(0, yoko);
 			for (int count = 0; count < tate - 1; count += 1) {
-				//Print << count;
+				Print << U"Processing column: " << count;
+				Logger << U"Processing column: " << count;
+
+				// stop calculation if stop pressed
+				if (stopFlag == true) {
+					Print << U"calculation canceled";
+					Logger << U"calculation canceled";
+					return std::nullopt;
+				}
+
 				int timer = 0;
 				do {
 					for (int j = research.first, j2 = research.first; j2 < research.second;) {
@@ -487,10 +504,27 @@ public:
 		for (int i = 0; i < allgenjou.size(); i++) {
 			for (int j = 0; j < allgenjou.at(0).size(); j++) {
 				if (allgenjou.at(i).at(j) != allrisou.at(i).at(j)) {
-					*ummatchCount++;
+					*unmatchCount++;
 				}
 			}
 		}
+
+
+		// print allgenjou
+		//Print << U"-----allgenjou-----";
+		Logger << U"-----allgenjou-----";
+		for (int i = 0; i < allgenjou.size(); i++) {
+			String s = U"";
+			for (int j = 0; j < allgenjou.at(0).size(); j++) {
+				s += Format(allgenjou.at(i).at(j));
+			}
+			//Print << s;
+			Logger << s;
+			
+		}
+
+		Print << U"unmatchCount: " << *unmatchCount;
+		Logger << U"unmatchCount: " << *unmatchCount;
 
 
 
