@@ -100,6 +100,13 @@ public:
 		//初期状態と完成形の入力
 		for (int i = 0; i < tate; i += 1) {
 			for (int j = 0; j < yoko; j += 1) {
+				allgenjou.at(i).at(j) = 0;
+			}
+		}
+		Print << problem.board.start[tate-1][yoko-1];
+
+		for (int i = 0; i < tate; i += 1) {
+			for (int j = 0; j < yoko; j += 1) {
 				allgenjou.at(i).at(j) = problem.board.start[i][j] - '0';
 			}
 		}
@@ -142,6 +149,8 @@ public:
 			set<pair<pint, pint>> deleteway;
 			pint research = make_pair(0, yoko);
 			for (int count = 0; count < tate - 1; count += 1) {
+				Print << count;
+				
 				for (int i = 0; i < 4; i += 1) {
 					move[i] = 0;
 				}
@@ -408,6 +417,7 @@ public:
 			set<pair<pint, pint>> deleteway;
 			pint research = make_pair(0, yoko);
 			for (int count = 0; count < tate - 1; count += 1) {
+				//Print << count;
 				int timer = 0;
 				do {
 					for (int j = research.first, j2 = research.first; j2 < research.second;) {
@@ -464,6 +474,10 @@ public:
 					//型抜きを行う
 					while (raw != tate - 1) {
 						//tesuu += 1;
+						if (pow(2, floor(log(waywidth + 1.0001) / log(2))) - waywidth != 1) {
+							Print << U"oh";
+						}
+						//Print << pow(2,floor(log(waywidth + 1.0001) / log(2)))-waywidth;
 						if (raw - sorted >= waywidth) {
 							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << raw - max(0, waywidth - 1) << " " << way.first << " " << 2 << endl;
 							storeSolution(&solution, floor(log(waywidth + 1.0001) / log(2)) * 3, raw - max(0, waywidth - 1), way.first, 2);
