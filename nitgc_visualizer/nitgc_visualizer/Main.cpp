@@ -38,6 +38,7 @@ void Main()
 		//texts
 		font(U"attempts: ", attempts).draw(440,30);
 		font(U"minOps: ", minOps).draw(440, 100);
+		font(U"minUnmatch: ", minUnmatch).draw(440, 170);
 
 
 		// START button (setup)
@@ -82,29 +83,22 @@ void Main()
 					Solution res = result.value();
 					Print << U"calculation completed";
 					Print << U"ops = " << res.n;
+					Print << U"unmatch = " << unmatch;
 					attempts++;
 
 					// judge if do post action
-					/*if (minUnmatch == -1 || minUnmatch > unmatch) {
-
-					}*/
-					if (minOps == -1 || minOps > res.n) {
-						// write json file & POST request
-						minOps = res.n;
-						if (JsonManager::jsonWrite(res)) {
-							Print << U"Json file write OK";
-
-							if (JsonManager::sendPostAction()) {
-								Print << U"Post Action OK";
-							}
-							else {
-								Print << U"Post Action failed";
-							}
-						}
-						else {
-							Print << U"Cannot write json file";
+					if (minUnmatch == 0) {
+						if (minOps == -1 || minOps > res.n) {
+							// write json file & POST request
+							minOps = res.n;
+							JsonManager::sendActions(res);
 						}
 					}
+					else if (minUnmatch == -1 || minUnmatch > unmatch){
+						minUnmatch = unmatch;
+						JsonManager::sendActions;
+					}
+					
 
 					isProcessing = false;
 

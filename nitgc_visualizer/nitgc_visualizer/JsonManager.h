@@ -193,6 +193,24 @@ public:
 
 		return true;
 	}
+
+
+	static void sendActions(Solution result) {
+		// write json file & POST request
+		if (JsonManager::jsonWrite(result)) {
+			Print << U"Json file write OK";
+
+			if (JsonManager::sendPostAction()) {
+				Print << U"Post Action OK";
+			}
+			else {
+				Print << U"Post Action failed";
+			}
+		}
+		else {
+			Print << U"Cannot write json file";
+		}
+	}
 	
 };
 
