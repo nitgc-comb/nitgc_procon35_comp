@@ -100,13 +100,6 @@ public:
 		//初期状態と完成形の入力
 		for (int i = 0; i < tate; i += 1) {
 			for (int j = 0; j < yoko; j += 1) {
-				allgenjou.at(i).at(j) = 0;
-			}
-		}
-		Print << problem.board.start[tate-1][yoko-1];
-
-		for (int i = 0; i < tate; i += 1) {
-			for (int j = 0; j < yoko; j += 1) {
 				allgenjou.at(i).at(j) = problem.board.start[i][j] - '0';
 			}
 		}
@@ -184,6 +177,7 @@ public:
 						j2 = j;
 					}
 					if (addedway.size() == 0) {
+						//Print << move[0] << move[1] << move[2] << move[3];
 						break;
 					}
 					int i = addedway.begin()->first, j = addedway.begin()->first;
@@ -228,6 +222,7 @@ public:
 					addedway.clear();
 					//型抜きを行う場所がない=その行に数字がすべてそろっているという事なので、その行はそろっている
 					if (freeway2.size() == 0 && limitway2.size() == 0) {
+						//Print << U"-------------------------------------";
 						break;
 					}
 					//型抜き範囲の真上において何行目から型抜きをしてくるのが一番効率がいいかを判断する。
@@ -358,9 +353,11 @@ public:
 			//tesuu += 1;
 			downshape(&genjou, side, 22, 0, tate - 257);
 			for (int i = 0; i < tate; i += 1) {
+				//int kazu[4] = { 0,0,0,0 };
 				for (int j = 0; j < yoko; j += 1) {
 					allgenjou.at(i).at(j) = genjou.at(i).at((j + side.at(i)) % yoko);
 				}
+				//Print << kazu[0] << kazu[1] << kazu[2] << kazu[3];
 			}
 		}
 
@@ -474,9 +471,9 @@ public:
 					//型抜きを行う
 					while (raw != tate - 1) {
 						//tesuu += 1;
-						if (pow(2, floor(log(waywidth + 1.0001) / log(2))) - waywidth != 1) {
+						/*if (pow(2, floor(log(waywidth + 1.0001) / log(2))) - waywidth != 1) {
 							Print << U"oh";
-						}
+						}*/
 						//Print << pow(2,floor(log(waywidth + 1.0001) / log(2)))-waywidth;
 						if (raw - sorted >= waywidth) {
 							cout << floor(log(waywidth + 1.0001) / log(2)) * 3 << " " << raw - max(0, waywidth - 1) << " " << way.first << " " << 2 << endl;
