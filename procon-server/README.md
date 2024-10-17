@@ -1,5 +1,5 @@
 # procon35 server
-## 簡易サーバーを動かす方法
+## input.json
 以下のような設定ファイルを用意し, server コマンドに -c で指定して実行すると 10 秒後に試合が開始されます。
 ```
 {
@@ -55,13 +55,20 @@
 `teams` にはチームのトークン情報を記述します。
 `duration` には試合時間を秒で記述します。
 `problem` には問題の情報を記述します。problemの形式については募集要項を参照してください。
-プログラムのlistenするポートはデフォルトでは 3000 番ですが -l :8000 のように実行時の引数に渡すと使用するポートを変更することができます。 または環境変数 PORT によっても指定できます。その際には PORT=8000 のように指定してください。
 
+## create testcase & start server
+in directory `procon-server`, there also has test input case file and c program to create test case file
+
+when you want to execute c program, open `Command prompt` move your current directory to `procon-server` directory and press command:
 ```
-procon-server_darwin_arm -c input.json -l :8080 -start 10s
+create_testcase
+```
+then, press command and setup your server:
+```
+procon-server_win -c {input file} -l :8080
 ```
 
-起動してから試合開始までの時間はデフォルトで 10 秒になっていますが -start 1s のように引数で渡すことで変更することができます。
+
 
 ## 問題情報取得
 `/problem` にtokenをつけてGETリクエストを送ることで試合情報が取得できます。
@@ -103,3 +110,5 @@ curl -v localhost:8080/problem -H "Procon-Token: token1"
 ```
 curl -X POST -H "Content-Type: application/json" -H "Procon-Token: token1" localhost:8080/answer -d @solution.json
 ```
+
+
