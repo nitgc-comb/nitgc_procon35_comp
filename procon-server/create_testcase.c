@@ -52,7 +52,8 @@ int main() {
   fprintf(fp, "  \"teams\": [\n");
   fprintf(fp, "    \"token1\",\n");
   fprintf(fp, "    \"token2\",\n");
-  fprintf(fp, "    \"token3\"\n");
+  fprintf(fp, "    \"token3\",\n");
+  fprintf(fp, "    \"gifu9c7ad1365ffacfb468599408e9733fb1440ae3b7ab38c8094b9d19f5eccd\"\n");
   fprintf(fp, "  ],\n");
   fprintf(fp, "  \"duration\": 86400,\n");
   fprintf(fp, "  \"problem\": {\n");
