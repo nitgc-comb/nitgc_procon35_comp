@@ -11,7 +11,7 @@ public:
 		/*const String jsonFoldername = DateTime::Now().format(U"yyyy-MM-dd HH-mm-ss");
 		const String jsonsaveFolder = U"json/" + jsonFoldername + U"/";*/
 
-		const String token = U"token1";
+		const String token = U"gifu9c7ad1365ffacfb468599408e9733fb1440ae3b7ab38c8094b9d19f5eccd";
 		const URL url = U"localhost:8080/problem";
 		const HashTable<String, String> headers = { {U"Procon-Token", token} };
 		const FilePath saveFilePath = U"get_matches_response.json";
@@ -45,7 +45,7 @@ public:
 	static bool sendPostAction() {
 
 		const URL url = U"localhost:8080/answer";
-		const String token = U"token1";
+		const String token = U"gifu9c7ad1365ffacfb468599408e9733fb1440ae3b7ab38c8094b9d19f5eccd";
 		const HashTable<String, String> headers = { {U"Procon-Token", token}, {U"Content-Type", U"application/json"} };
 		const FilePath saveFilePath = U"post_action_response.json";
 
